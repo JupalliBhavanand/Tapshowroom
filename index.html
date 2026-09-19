@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TapShowroom AR/3D Representative</title>
+    <title>TapShowroom - Universal AR/3D Representative</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js for 3D Virtual Representative -->
@@ -26,11 +26,6 @@
                             cyan: '#06b6d4',
                             emerald: '#10b981',
                             amber: '#f59e0b',
-                        },
-                        glass: {
-                            bg: 'rgba(13, 11, 26, 0.75)',
-                            border: 'rgba(255, 255, 255, 0.12)',
-                            glow: 'rgba(168, 85, 247, 0.25)'
                         }
                     },
                     fontFamily: {
@@ -39,22 +34,11 @@
                     },
                     animation: {
                         'pulse-glow': 'pulseGlow 2.5s ease-in-out infinite',
-                        'float': 'float 5s ease-in-out infinite',
-                        'scanline': 'scanline 8s linear infinite',
-                        'orbit': 'orbit 12s linear infinite'
                     },
                     keyframes: {
                         pulseGlow: {
                             '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
                             '50%': { opacity: '0.8', transform: 'scale(1.05)' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-10px) rotate(1deg)' }
-                        },
-                        scanline: {
-                            '0%': { transform: 'translateY(-100%)' },
-                            '100%': { transform: 'translateY(1000%)' }
                         }
                     }
                 }
@@ -73,7 +57,7 @@
             overflow-x: hidden;
         }
         .glass-panel {
-            background: rgba(15, 12, 29, 0.7);
+            background: rgba(15, 12, 29, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -91,16 +75,6 @@
             background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        .gradient-border {
-            position: relative;
-            border-radius: 1rem;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(6, 182, 212, 0.2));
-            padding: 1px;
-        }
-        .gradient-border-inner {
-            background: #0d0b1a;
-            border-radius: calc(1rem - 1px);
         }
         /* Custom scrollbars */
         ::-webkit-scrollbar {
@@ -129,7 +103,7 @@
             <div>
                 <div class="flex items-center space-x-2">
                     <h1 class="font-display font-extrabold text-xl tracking-tight gradient-text">TapShowroom</h1>
-                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">3D Humanoid AI</span>
+                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Universal 3D AI</span>
                 </div>
                 <p class="text-xs text-slate-400 hidden sm:block">Interactive Photorealistic Virtual Concierge</p>
             </div>
@@ -145,7 +119,7 @@
                 <i class="fa-solid fa-chart-pie text-cyan-400"></i>
                 <span class="hidden sm:inline">Analytics</span>
             </button>
-            <button id="openConfigBtn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition" title="Settings">
+            <button id="openConfigBtn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition" title="LLM Configuration">
                 <i class="fa-solid fa-sliders"></i>
             </button>
         </div>
@@ -461,40 +435,52 @@
         </div>
     </div>
 
-    <!-- API Key Settings Modal -->
+    <!-- Universal LLM Configuration Modal -->
     <div id="configModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="glass-panel rounded-3xl border border-white/10 max-w-md w-full p-6 shadow-2xl">
             <div class="flex items-center justify-between pb-4 border-b border-white/10">
-                <h3 class="font-bold text-base text-white font-display">Gemini API Configuration</h3>
+                <h3 class="font-bold text-base text-white font-display">LLM Provider Configuration</h3>
                 <button id="closeConfigBtn" class="p-1.5 rounded-xl text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="mt-4 space-y-4">
-                <p class="text-xs text-slate-400">Enter your Gemini API Key below. The app uses `gemini-1.5-flash` for high-speed dialogue.</p>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Gemini API Key</label>
-                    <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Base URL</label>
+                    <input id="baseUrlInput" type="text" placeholder="https://generativelanguage.googleapis.com/v1beta/openai" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <p class="text-[10px] text-slate-500 mt-1">Examples: <code>https://generativelanguage.googleapis.com/v1beta/openai</code>, <code>https://api.openai.com/v1</code>, <code>https://api.groq.com/openai/v1</code>, or <code>http://localhost:11434/v1</code></p>
                 </div>
-                <button id="saveApiKeyBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-xs text-white transition hover:opacity-95 shadow-lg shadow-purple-600/20">Save Configuration</button>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">API Key</label>
+                    <input id="apiKeyInput" type="password" placeholder="Key string..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Model Name</label>
+                    <input id="modelInput" type="text" placeholder="gemini-2.5-flash" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <p class="text-[10px] text-slate-500 mt-1">Examples: <code>gemini-2.5-flash</code>, <code>gpt-4o-mini</code>, <code>llama-3.3-70b-versatile</code>, <code>llama3.2</code></p>
+                </div>
+                <button id="saveApiKeyBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-xs text-white transition hover:opacity-95 shadow-lg shadow-purple-600/20">Save Provider Settings</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Global Application State
+        // Universal Application State
         const state = {
-            apiKey: localStorage.getItem('gemini_api_key') || '',
+            baseUrl: localStorage.getItem('llm_base_url') || 'https://generativelanguage.googleapis.com/v1beta/openai',
+            apiKey: localStorage.getItem('llm_api_key') || '',
+            model: localStorage.getItem('llm_model') || 'gemini-2.5-flash',
             isListening: false,
             isSpeaking: false,
             isThinking: false,
             avatarState: 'idle',
             hasTappedNFC: false,
             audioSynth: window.speechSynthesis,
-            recognition: null
+            recognition: null,
+            conversationHistory: []
         };
 
-        // DOM Element Cache
+        // DOM Elements
         const simTapBtn = document.getElementById('simTapBtn');
         const nfcCard = document.getElementById('nfcCard');
         const rippleOverlay = document.getElementById('rippleOverlay');
@@ -520,14 +506,16 @@
         const configModal = document.getElementById('configModal');
         const openConfigBtn = document.getElementById('openConfigBtn');
         const closeConfigBtn = document.getElementById('closeConfigBtn');
+        const baseUrlInput = document.getElementById('baseUrlInput');
         const apiKeyInput = document.getElementById('apiKeyInput');
+        const modelInput = document.getElementById('modelInput');
         const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
 
-        // Three.js Photorealistic 3D Humanoid Head Setup
+        // Three.js Scene Components
         let scene, camera, renderer;
         let avatarGroup, headMesh, neckMesh, bodyMesh;
         let leftEye, rightEye, irisLeft, irisRight;
-        let upperLip, lowerLip, chinMesh, cheekLeft, cheekRight, browLeft, browRight;
+        let upperLip, lowerLip, cheekLeft, cheekRight, browLeft, browRight;
 
         function initThreeJS() {
             const container = document.getElementById('characterCanvasContainer');
@@ -545,48 +533,44 @@
             renderer.toneMappingExposure = 1.1;
             container.appendChild(renderer.domElement);
 
-            // Realistic Lighting Setup
+            // Lighting Setup
             const ambientLight = new THREE.AmbientLight(0xfefefe, 0.9);
             scene.add(ambientLight);
 
-            // Studio Key Light (Warm Cyber-Pink)
             const keyLight = new THREE.DirectionalLight(0xec4899, 1.8);
             keyLight.position.set(2, 3, 3);
             scene.add(keyLight);
 
-            // Fill Light (Soft Cyan)
             const fillLight = new THREE.DirectionalLight(0x06b6d4, 1.4);
             fillLight.position.set(-2, 1, 2);
             scene.add(fillLight);
 
-            // Rim Light (Deep Purple Backlight for depth)
             const rimLight = new THREE.DirectionalLight(0xa855f7, 2.2);
             rimLight.position.set(0, 2, -3);
             scene.add(rimLight);
 
-            // Humanoid Avatar Group
+            // Humanoid Group Construction
             avatarGroup = new THREE.Group();
 
-            // Realistic Skin Material with Soft Shading
             const skinMaterial = new THREE.MeshStandardMaterial({
-                color: 0xe0ac69, // Natural warm tone
+                color: 0xe0ac69,
                 roughness: 0.45,
                 metalness: 0.05,
             });
 
             const suitMaterial = new THREE.MeshStandardMaterial({
-                color: 0x120e24, // Dark luxury fabric
+                color: 0x120e24,
                 roughness: 0.6,
                 metalness: 0.2
             });
 
-            // 1. Head Base
+            // Head Mesh
             const headGeo = new THREE.SphereGeometry(0.48, 32, 32);
             headGeo.scale(1, 1.25, 0.95);
             headMesh = new THREE.Mesh(headGeo, skinMaterial);
             avatarGroup.add(headMesh);
 
-            // Cheeks for natural facial structure
+            // Cheeks
             const cheekGeo = new THREE.SphereGeometry(0.18, 16, 16);
             cheekLeft = new THREE.Mesh(cheekGeo, skinMaterial);
             cheekLeft.position.set(-0.22, -0.05, 0.35);
@@ -596,14 +580,13 @@
             cheekRight.position.set(0.22, -0.05, 0.35);
             headMesh.add(cheekRight);
 
-            // 2. Eyes Construction (Realistic Eyeballs & Glowing Irises)
+            // Eyes Assembly
             const eyeScleraGeo = new THREE.SphereGeometry(0.075, 16, 16);
             const scleraMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.1 });
 
             const irisGeo = new THREE.SphereGeometry(0.04, 16, 16);
-            const irisMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // Cyan Iris
+            const irisMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 });
 
-            // Left Eye
             leftEye = new THREE.Mesh(eyeScleraGeo, scleraMat);
             leftEye.position.set(-0.16, 0.12, 0.41);
             irisLeft = new THREE.Mesh(irisGeo, irisMat);
@@ -611,7 +594,6 @@
             leftEye.add(irisLeft);
             headMesh.add(leftEye);
 
-            // Right Eye
             rightEye = new THREE.Mesh(eyeScleraGeo, scleraMat);
             rightEye.position.set(0.16, 0.12, 0.41);
             irisRight = new THREE.Mesh(irisGeo, irisMat);
@@ -632,7 +614,7 @@
             browRight.rotation.z = 0.05;
             headMesh.add(browRight);
 
-            // 3. Humanoid Lips & Mouth Assembly
+            // Lips Assembly
             const lipMat = new THREE.MeshStandardMaterial({ color: 0xc25975, roughness: 0.3 });
             
             const upperLipGeo = new THREE.BoxGeometry(0.18, 0.03, 0.04);
@@ -645,7 +627,7 @@
             lowerLip.position.set(0, -0.22, 0.42);
             headMesh.add(lowerLip);
 
-            // 4. Neck and Torso
+            // Neck & Shoulders
             const neckGeo = new THREE.CylinderGeometry(0.2, 0.25, 0.4, 24);
             neckMesh = new THREE.Mesh(neckGeo, skinMaterial);
             neckMesh.position.set(0, -0.7, 0);
@@ -658,18 +640,16 @@
 
             scene.add(avatarGroup);
 
-            // Mouse Look / Interactive Eye Tracking
+            // Interactive Eye/Head Tracking
             window.addEventListener('mousemove', (e) => {
                 const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
                 
                 if (avatarGroup) {
-                    // Smooth head turn target
                     avatarGroup.rotation.y = THREE.MathUtils.lerp(avatarGroup.rotation.y, mouseX * 0.25, 0.08);
                     avatarGroup.rotation.x = THREE.MathUtils.lerp(avatarGroup.rotation.x, -mouseY * 0.15, 0.08);
                 }
 
-                // Micro eye movements
                 if (irisLeft && irisRight) {
                     irisLeft.position.x = THREE.MathUtils.lerp(irisLeft.position.x, mouseX * 0.015, 0.1);
                     irisLeft.position.y = THREE.MathUtils.lerp(irisLeft.position.y, mouseY * 0.015, 0.1);
@@ -678,7 +658,6 @@
                 }
             });
 
-            // Handle Window Resize
             window.addEventListener('resize', () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
@@ -697,12 +676,11 @@
             requestAnimationFrame(animate3D);
             const elapsedTime = clock.getElapsedTime();
 
-            // Natural Breathing & Subtle Floating motion
             if (avatarGroup) {
                 avatarGroup.position.y = Math.sin(elapsedTime * 1.8) * 0.02;
             }
 
-            // Realistic Micro Eye Blinking Logic
+            // Natural Blinking
             blinkTimer += 0.016;
             if (blinkTimer > 3.5 + Math.random() * 2) {
                 blinkTimer = 0;
@@ -718,38 +696,24 @@
                 }
             }
 
-            // Expressive Speech Lip-Sync Animation
+            // Lip-Sync and Expressions
             if (state.isSpeaking && lowerLip && upperLip) {
                 const mouthOpen = Math.abs(Math.sin(elapsedTime * 18)) * 0.08 + 0.01;
                 lowerLip.position.y = -0.22 - mouthOpen;
                 upperLip.position.y = -0.18 + (mouthOpen * 0.3);
-                
-                // Animated Eyebrow Expression while Speaking
-                if (browLeft && browRight) {
-                    browLeft.position.y = 0.22 + Math.sin(elapsedTime * 8) * 0.01;
-                    browRight.position.y = 0.22 + Math.sin(elapsedTime * 8) * 0.01;
-                }
-                setIrisColor(0xec4899); // Active Cyber-Pink
+                setIrisColor(0xec4899);
             } else if (state.isListening && lowerLip) {
                 lowerLip.position.y = -0.22;
                 upperLip.position.y = -0.18;
-                if (browLeft && browRight) {
-                    browLeft.position.y = 0.23; // Attentive slightly raised eyebrows
-                    browRight.position.y = 0.23;
-                }
-                setIrisColor(0x10b981); // Emerald Active Listening
+                setIrisColor(0x10b981);
             } else if (state.isThinking) {
-                setIrisColor(0xf59e0b); // Amber Thinking
+                setIrisColor(0xf59e0b);
             } else {
                 if (lowerLip && upperLip) {
                     lowerLip.position.y = -0.22;
                     upperLip.position.y = -0.18;
                 }
-                if (browLeft && browRight) {
-                    browLeft.position.y = 0.22;
-                    browRight.position.y = 0.22;
-                }
-                setIrisColor(0x06b6d4); // Cyan Ready
+                setIrisColor(0x06b6d4);
             }
 
             renderer.render(scene, camera);
@@ -762,7 +726,7 @@
             }
         }
 
-        // Voice Recognition Setup
+        // Voice Recognition
         function initSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (SpeechRecognition) {
@@ -771,9 +735,7 @@
                 state.recognition.interimResults = false;
                 state.recognition.lang = 'en-US';
 
-                state.recognition.onstart = () => {
-                    setAvatarState('listening');
-                };
+                state.recognition.onstart = () => setAvatarState('listening');
 
                 state.recognition.onresult = (event) => {
                     const transcript = event.results[0][0].transcript;
@@ -781,25 +743,20 @@
                     handleUserQuery(transcript);
                 };
 
-                state.recognition.onerror = () => {
-                    setAvatarState('idle');
-                };
-
+                state.recognition.onerror = () => setAvatarState('idle');
                 state.recognition.onend = () => {
-                    if (!state.isSpeaking) {
-                        setAvatarState('idle');
-                    }
+                    if (!state.isSpeaking) setAvatarState('idle');
                 };
             }
         }
 
-        // Natural Human Voice Speech Synthesis
+        // Voice Speech Output
         function speakText(text) {
             if (!state.audioSynth) return;
             state.audioSynth.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.95; // Natural human pace
+            utterance.rate = 0.95;
             utterance.pitch = 1.05;
 
             utterance.onstart = () => {
@@ -807,10 +764,7 @@
                 showSubtitle(text);
             };
 
-            utterance.onend = () => {
-                setAvatarState('idle');
-            };
-
+            utterance.onend = () => setAvatarState('idle');
             state.audioSynth.speak(utterance);
         }
 
@@ -854,46 +808,69 @@
             }
         }
 
-        // Perform Gemini API Query
-        async function queryGemini(promptText) {
+        // Universal OpenAI-Compatible Multi-LLM API Query Function
+        async function queryLLM(promptText) {
+            if (!state.apiKey && !state.baseUrl.includes('localhost')) {
+                const noKeyMsg = "Please click the settings icon in the top-right and enter your LLM Base URL, API Key, and Model.";
+                appendChatMessage('representative', noKeyMsg);
+                speakText(noKeyMsg);
+                return;
+            }
+
             setAvatarState('thinking');
 
-            const systemPrompt = `You are Elena Vance, a warm, charming, and highly intelligent human executive representative for LuxeForm furniture.
-            Speak naturally like a real person in conversation. 
-            Keep your responses concise (2 to 3 sentences maximum) suitable for speech dialogue. 
-            Answer customer questions regarding sofa dimensions, doorway fit, stain warranties, executive desk specs, and custom order quotes accurately.`;
+            const cleanBaseUrl = state.baseUrl.replace(/\/+$/, '');
+            const endpoint = `${cleanBaseUrl}/chat/completions`;
 
-            const apiKey = state.apiKey;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const systemPrompt = `You are Elena Vance, a warm, charming, and highly intelligent executive representative for LuxeForm furniture.
+Speak naturally like a real person in conversation. 
+Keep your responses concise (2 to 3 sentences maximum) suitable for speech dialogue. 
+Answer customer questions regarding sofa dimensions, doorway fit, stain warranties, executive desk specs, and custom order quotes accurately.`;
+
+            state.conversationHistory.push({ role: "user", content: promptText });
 
             const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
+                model: state.model,
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    ...state.conversationHistory.slice(-6)
+                ],
+                temperature: 0.7,
+                max_tokens: 200
             };
 
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch(endpoint, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${state.apiKey}`
+                    },
                     body: JSON.stringify(payload)
                 });
 
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 const data = await response.json();
-                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                const replyText = data?.choices?.[0]?.message?.content;
 
                 if (replyText) {
+                    state.conversationHistory.push({ role: "assistant", content: replyText });
                     appendChatMessage('representative', replyText);
                     speakText(replyText);
                 } else {
-                    const fallback = "I'm having a quick moment connecting to our catalog database, but our Aura Sectional sofa comfortably fits doorways 30 inches and wider!";
-                    appendChatMessage('representative', fallback);
-                    speakText(fallback);
+                    throw new Error("No response content generated.");
                 }
+
             } catch (err) {
-                console.error("Gemini API Error:", err);
-                const localReply = "Our Aura Modular Velvet Sofa features ergonomic memory foam and requires a minimum 30-inch doorway clearance. Would you like me to prepare a custom quote for you?";
-                appendChatMessage('representative', localReply);
-                speakText(localReply);
+                console.error("LLM Provider API Error:", err);
+                setAvatarState('idle');
+                const errorMsg = `Provider Error (${state.model}): ${err.message}`;
+                appendChatMessage('representative', errorMsg);
+                speakText("I encountered an issue connecting to the AI provider. Please verify your settings.");
             }
         }
 
@@ -901,7 +878,7 @@
             if (!query.trim()) return;
             appendChatMessage('user', query);
             userTextInput.value = '';
-            queryGemini(query);
+            queryLLM(query);
         }
 
         function appendChatMessage(sender, text) {
@@ -919,7 +896,6 @@
             chatHistoryBox.scrollTop = chatHistoryBox.scrollHeight;
         }
 
-        // NFC Tap Simulation Trigger
         function triggerNFCTap() {
             state.hasTappedNFC = true;
             sessionStatusText.textContent = "NFC Connected";
@@ -932,19 +908,18 @@
             speakText(greeting);
         }
 
+        // Event Listeners
         simTapBtn.addEventListener('click', triggerNFCTap);
         nfcCard.addEventListener('click', triggerNFCTap);
 
-        // Chat Form Submit
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
             handleUserQuery(userTextInput.value);
         });
 
-        // Microphone Button Listener
         micToggleBtn.addEventListener('click', () => {
             if (!state.recognition) {
-                alert("Speech Recognition API is not supported in this browser. You can type in the input box!");
+                alert("Speech recognition is not supported in this browser. You can type in the input box!");
                 return;
             }
 
@@ -954,12 +929,11 @@
                 try {
                     state.recognition.start();
                 } catch (e) {
-                    console.log("Mic restart: ", e);
+                    console.log("Mic restart:", e);
                 }
             }
         });
 
-        // Quick Inquiries Buttons
         document.querySelectorAll('.quick-prompt-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const text = btn.querySelector('span').textContent.replace(/"/g, '');
@@ -968,7 +942,6 @@
             });
         });
 
-        // Doorway Clearance Test Tool
         document.getElementById('checkFitBtn').addEventListener('click', () => {
             const width = parseFloat(document.getElementById('doorWidthInput').value);
             const resultEl = document.getElementById('fitResultText');
@@ -997,19 +970,26 @@
         closeDashboardBtn.addEventListener('click', () => dashboardModal.classList.add('hidden'));
 
         openConfigBtn.addEventListener('click', () => {
+            baseUrlInput.value = state.baseUrl;
             apiKeyInput.value = state.apiKey;
+            modelInput.value = state.model;
             configModal.classList.remove('hidden');
             configModal.classList.add('flex');
         });
         closeConfigBtn.addEventListener('click', () => configModal.classList.add('hidden'));
 
         saveApiKeyBtn.addEventListener('click', () => {
+            state.baseUrl = baseUrlInput.value.trim() || 'https://generativelanguage.googleapis.com/v1beta/openai';
             state.apiKey = apiKeyInput.value.trim();
-            localStorage.setItem('gemini_api_key', state.apiKey);
+            state.model = modelInput.value.trim() || 'gemini-2.5-flash';
+
+            localStorage.setItem('llm_base_url', state.baseUrl);
+            localStorage.setItem('llm_api_key', state.apiKey);
+            localStorage.setItem('llm_model', state.model);
+
             configModal.classList.add('hidden');
         });
 
-        // Initialize Window OnLoad
         window.onload = function () {
             initThreeJS();
             initSpeechRecognition();
