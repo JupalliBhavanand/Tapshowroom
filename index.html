@@ -102,7 +102,7 @@
         <div class="flex items-center space-x-3">
             <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-teal-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                 <div class="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                    <i class="fa-solid fa-[#000] fa-wifi text-teal-400 text-lg rotate-90"></i>
+                    <i class="fa-solid fa-wifi text-teal-400 text-lg rotate-90"></i>
                 </div>
             </div>
             <div>
@@ -123,9 +123,6 @@
             <button id="toggleDashboardBtn" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 transition">
                 <i class="fa-solid fa-chart-line text-teal-400"></i>
                 <span class="hidden sm:inline">Staff Dashboard</span>
-            </button>
-            <button id="openConfigBtn" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-slate-300 hover:text-white transition" title="API Settings">
-                <i class="fa-solid fa-gear"></i>
             </button>
         </div>
     </header>
@@ -431,30 +428,9 @@
         </div>
     </div>
 
-    <!-- API Key Settings Modal -->
-    <div id="configModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel rounded-2xl border border-white/10 max-w-md w-full p-6 shadow-2xl">
-            <div class="flex items-center justify-between pb-4 border-b border-white/10">
-                <h3 class="font-bold text-base text-white">Gemini API Settings</h3>
-                <button id="closeConfigBtn" class="p-1 rounded text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="mt-4 space-y-4">
-                <p class="text-xs text-slate-400">Enter your Gemini API Key below. The app uses `gemini-3-flash-preview` for high-speed representative speech dialogue.</p>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Gemini API Key</label>
-                    <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500">
-                </div>
-                <button id="saveApiKeyBtn" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-xs text-white transition">Save Key</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Global Application State
         const state = {
-            apiKey: localStorage.getItem('gemini_api_key') || '',
             isListening: false,
             isSpeaking: false,
             isThinking: false,
@@ -487,16 +463,10 @@
         const dashboardModal = document.getElementById('dashboardModal');
         const toggleDashboardBtn = document.getElementById('toggleDashboardBtn');
         const closeDashboardBtn = document.getElementById('closeDashboardBtn');
-        const configModal = document.getElementById('configModal');
-        const openConfigBtn = document.getElementById('openConfigBtn');
-        const closeConfigBtn = document.getElementById('closeConfigBtn');
-        const apiKeyInput = document.getElementById('apiKeyInput');
-        const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
 
         // Three.js 3D Virtual Character Setup
         let scene, camera, renderer;
         let headMesh, mouthMesh, leftEye, rightEye, bodyMesh, auraMesh;
-        let mouthMorphed = 0;
 
         function initThreeJS() {
             const container = document.getElementById('characterCanvasContainer');
@@ -528,7 +498,7 @@
             // Virtual Character Group
             const characterGroup = new THREE.Group();
 
-            // Head Mesh (Smooth Sci-Fi Stylized Upper Body / Head)
+            // Head Mesh
             const headGeo = new THREE.SphereGeometry(0.55, 32, 32);
             headGeo.scale(1, 1.2, 0.9);
             const headMat = new THREE.MeshStandardMaterial({
@@ -552,14 +522,14 @@
             rightEye.position.set(0.18, 0.1, 0.48);
             headMesh.add(rightEye);
 
-            // Animated Mouth (Lip Sync)
+            // Animated Mouth
             const mouthGeo = new THREE.BoxGeometry(0.24, 0.04, 0.05);
             const mouthMat = new THREE.MeshBasicMaterial({ color: 0x6366f1 });
             mouthMesh = new THREE.Mesh(mouthGeo, mouthMat);
             mouthMesh.position.set(0, -0.22, 0.5);
             headMesh.add(mouthMesh);
 
-            // Torso / Suit Base
+            // Torso Base
             const bodyGeo = new THREE.CylinderGeometry(0.4, 0.7, 1.2, 32);
             const bodyMat = new THREE.MeshStandardMaterial({
                 color: 0x0f172a,
@@ -570,7 +540,7 @@
             bodyMesh.position.set(0, -1.1, 0);
             characterGroup.add(bodyMesh);
 
-            // Halo / Representative Standby Ring
+            // Standby Ring
             const ringGeo = new THREE.RingGeometry(0.8, 0.85, 32);
             const ringMat = new THREE.MeshBasicMaterial({ color: 0x14b8a6, side: THREE.DoubleSide });
             auraMesh = new THREE.Mesh(ringGeo, ringMat);
@@ -607,7 +577,6 @@
             requestAnimationFrame(animate3D);
             const elapsedTime = clock.getElapsedTime();
 
-            // Breathing / Floating motion
             if (headMesh) {
                 headMesh.position.y = Math.sin(elapsedTime * 2) * 0.04;
             }
@@ -615,17 +584,16 @@
                 auraMesh.rotation.z += 0.01;
             }
 
-            // Lip-sync / Speech Mouth Animation
             if (state.isSpeaking && mouthMesh) {
                 const openScale = 1 + Math.sin(elapsedTime * 25) * 1.5;
                 mouthMesh.scale.set(1, openScale, 1);
-                eyeMeshColor(0x6366f1); // Indigo active speaking color
+                eyeMeshColor(0x6366f1);
             } else if (state.isListening && mouthMesh) {
                 mouthMesh.scale.set(1, 0.8, 1);
-                eyeMeshColor(0x2dd4bf); // Teal listening color
+                eyeMeshColor(0x2dd4bf);
             } else if (state.isThinking && mouthMesh) {
                 mouthMesh.scale.set(0.6, 0.5, 1);
-                eyeMeshColor(0xf59e0b); // Amber thinking color
+                eyeMeshColor(0xf59e0b);
             } else {
                 if (mouthMesh) mouthMesh.scale.set(1, 1, 1);
                 eyeMeshColor(0x2dd4bf);
@@ -675,7 +643,7 @@
         // Voice Speech Synthesis
         function speakText(text) {
             if (!state.audioSynth) return;
-            state.audioSynth.cancel(); // Stop ongoing speech
+            state.audioSynth.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 1.0;
@@ -733,31 +701,19 @@
             }
         }
 
-        // Perform Gemini 2.5 Flash API Query
+        // Call backend route `/api/chat` which securely reads GEMINI_API_KEY from environment variables
         async function queryGemini(promptText) {
             setAvatarState('thinking');
 
-            const systemPrompt = `You are Elena Vance, an expert, warm, and professional enterprise showroom representative for LuxeForm furniture. 
-            Keep your responses concise (2 to 3 sentences maximum) suitable for audio speech. 
-            Answer customer questions regarding sofa dimensions, doorway fit, stain warranties, executive desk specs, and custom order quotes accurately.`;
-
-            const apiKey = state.apiKey;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
-
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ prompt: promptText })
                 });
 
                 const data = await response.json();
-                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                const replyText = data?.reply;
 
                 if (replyText) {
                     appendChatMessage('representative', replyText);
@@ -768,7 +724,7 @@
                     speakText(fallback);
                 }
             } catch (err) {
-                console.error("Gemini API Error:", err);
+                console.error("API Route Error:", err);
                 const localReply = "Our Aura Modular Velvet Sofa is built with high-density ergonomic memory foam and requires a minimum 30-inch doorway clearance. Would you like me to reserve a quote?";
                 appendChatMessage('representative', localReply);
                 speakText(localReply);
@@ -802,7 +758,6 @@
             state.hasTappedNFC = true;
             sessionStatusText.textContent = "NFC Connected";
 
-            // Card ripple animation
             rippleOverlay.classList.remove('opacity-0');
             setTimeout(() => rippleOverlay.classList.add('opacity-0'), 1000);
 
@@ -871,19 +826,6 @@
 
         toggleDashboardBtn.addEventListener('click', () => dashboardModal.classList.remove('hidden', 'flex').then ? null : dashboardModal.classList.add('flex'));
         closeDashboardBtn.addEventListener('click', () => dashboardModal.classList.add('hidden'));
-
-        openConfigBtn.addEventListener('click', () => {
-            apiKeyInput.value = state.apiKey;
-            configModal.classList.remove('hidden');
-            configModal.classList.add('flex');
-        });
-        closeConfigBtn.addEventListener('click', () => configModal.classList.add('hidden'));
-
-        saveApiKeyBtn.addEventListener('click', () => {
-            state.apiKey = apiKeyInput.value.trim();
-            localStorage.setItem('gemini_api_key', state.apiKey);
-            configModal.classList.add('hidden');
-        });
 
         // Initialize Window OnLoad
         window.onload = function () {
