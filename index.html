@@ -11,7 +11,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -19,36 +19,42 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            400: '#2dd4bf',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            900: '#134e4a',
-                            accent: '#6366f1',
-                            accentGlow: 'rgba(99, 102, 241, 0.35)'
+                        cyber: {
+                            purple: '#8b5cf6',
+                            violet: '#a855f7',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
                         },
-                        darkBg: '#0b0f17',
-                        glassBg: 'rgba(17, 24, 39, 0.75)',
-                        glassBorder: 'rgba(255, 255, 255, 0.08)'
+                        glass: {
+                            bg: 'rgba(13, 11, 26, 0.75)',
+                            border: 'rgba(255, 255, 255, 0.12)',
+                            glow: 'rgba(168, 85, 247, 0.25)'
+                        }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 4s ease-in-out infinite',
-                        'ripple': 'ripple 1.5s linear infinite',
+                        'pulse-glow': 'pulseGlow 2.5s ease-in-out infinite',
+                        'float': 'float 5s ease-in-out infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                        'orbit': 'orbit 12s linear infinite'
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-8px)' },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.05)' }
                         },
-                        ripple: {
-                            '0%': { transform: 'scale(0.8)', opacity: '1' },
-                            '100%': { transform: 'scale(2.2)', opacity: '0' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(1deg)' }
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(1000%)' }
                         }
                     }
                 }
@@ -58,74 +64,89 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #080c14;
+            background: #05040a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
             color: #f3f4f6;
             overflow-x: hidden;
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 12, 29, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
-        .glass-panel-hover:hover {
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+        .glass-panel-interactive {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glow-accent {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+        .glass-panel-interactive:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
         }
-        .nfc-card-shadow {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(20, 184, 166, 0.2);
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-border {
+            position: relative;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(6, 182, 212, 0.2));
+            padding: 1px;
+        }
+        .gradient-border-inner {
+            background: #0d0b1a;
+            border-radius: calc(1rem - 1px);
         }
         /* Custom scrollbars */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(13, 11, 26, 0.6);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(to bottom, #8b5cf6, #ec4899);
             border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.5);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#080c14] text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#05040a] text-slate-100 antialiased selection:bg-purple-500 selection:text-white">
 
     <!-- Navigation / Header -->
     <header class="sticky top-0 z-40 w-full glass-panel border-b border-white/10 px-4 lg:px-8 py-3.5 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-teal-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                <div class="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                    <i class="fa-solid fa-[#000] fa-wifi text-teal-400 text-lg rotate-90"></i>
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-0.5 flex items-center justify-center shadow-lg shadow-purple-500/30 animate-pulse-glow">
+                <div class="h-full w-full bg-[#080612] rounded-[10px] flex items-center justify-center">
+                    <i class="fa-solid fa-cube text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-lg"></i>
                 </div>
             </div>
             <div>
                 <div class="flex items-center space-x-2">
-                    <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">TapShowroom</h1>
-                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20">NFC Interactive 3D</span>
+                    <h1 class="font-display font-extrabold text-xl tracking-tight gradient-text">TapShowroom</h1>
+                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">3D Humanoid AI</span>
                 </div>
-                <p class="text-xs text-slate-400 hidden sm:block">Next-Gen Virtual Representative Platform</p>
+                <p class="text-xs text-slate-400 hidden sm:block">Interactive Photorealistic Virtual Concierge</p>
             </div>
         </div>
 
         <!-- Header Actions -->
         <div class="flex items-center space-x-2 sm:space-x-4">
-            <button id="toggleDrawerBtn" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 transition">
-                <i class="fa-solid fa-couch text-indigo-400"></i>
+            <button id="toggleDrawerBtn" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                <i class="fa-solid fa-couch text-pink-400"></i>
                 <span class="hidden sm:inline">Product Catalog</span>
             </button>
-            <button id="toggleDashboardBtn" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 transition">
-                <i class="fa-solid fa-chart-line text-teal-400"></i>
-                <span class="hidden sm:inline">Staff Dashboard</span>
+            <button id="toggleDashboardBtn" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 border border-white/10 transition">
+                <i class="fa-solid fa-chart-pie text-cyan-400"></i>
+                <span class="hidden sm:inline">Analytics</span>
             </button>
-            <button id="openConfigBtn" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-slate-300 hover:text-white transition" title="API Settings">
-                <i class="fa-solid fa-gear"></i>
+            <button id="openConfigBtn" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition" title="Settings">
+                <i class="fa-solid fa-sliders"></i>
             </button>
         </div>
     </header>
@@ -133,104 +154,108 @@
     <!-- Main Content Container -->
     <main class="flex-1 relative flex flex-col lg:flex-row p-4 lg:p-6 gap-6 max-w-[1700px] w-full mx-auto">
 
-        <!-- Left Column: Tap Simulator & NFC Trigger Area -->
+        <!-- Left Column: NFC Simulator & Specialist Profile -->
         <section class="w-full lg:w-1/3 flex flex-col gap-6">
             <!-- NFC Tap Card Box -->
-            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col items-center justify-center text-center border border-white/10 shadow-2xl">
-                <div class="absolute -top-24 -left-24 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="glass-panel rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center text-center border border-white/10 shadow-2xl">
+                <div class="absolute -top-24 -left-24 w-56 h-56 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-56 h-56 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div class="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/60 border border-teal-500/30 text-teal-400 text-xs font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                    Showroom Physical Display Tag
+                <div class="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 animate-ping"></span>
+                    Showroom Physical Smart Tag
                 </div>
 
                 <!-- Interactive NFC Card Graphic -->
-                <div id="nfcCard" class="group relative w-64 h-40 rounded-xl p-4 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 border border-teal-500/30 shadow-2xl cursor-pointer transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] active:scale-95 flex flex-col justify-between my-4 select-none">
-                    <div class="flex justify-between items-start">
+                <div id="nfcCard" class="group relative w-72 h-44 rounded-2xl p-5 bg-gradient-to-br from-purple-950/80 via-slate-900/90 to-slate-950 border border-purple-500/30 shadow-2xl cursor-pointer transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] active:scale-95 flex flex-col justify-between my-2 select-none overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="flex justify-between items-start z-10">
                         <div>
-                            <p class="text-[10px] text-teal-400 font-bold uppercase tracking-widest">NFC SMART TAG</p>
-                            <p class="text-sm font-bold text-white tracking-wide mt-0.5">LuxeForm Representative</p>
+                            <p class="text-[9px] text-purple-400 font-bold uppercase tracking-widest font-display">NFC SPATIAL TAG</p>
+                            <p class="text-base font-extrabold text-white tracking-wide mt-0.5">LuxeForm Representative</p>
                         </div>
-                        <i class="fa-solid fa-rss text-xl text-teal-400/80 group-hover:text-teal-300 transition rotate-45"></i>
+                        <i class="fa-solid fa-wifi text-xl text-pink-400 group-hover:scale-110 transition rotate-90"></i>
                     </div>
 
-                    <div class="flex items-center space-x-3 my-2">
-                        <div class="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300">
-                            <i class="fa-solid fa-user-tie text-xs"></i>
+                    <div class="flex items-center space-x-3 my-2 z-10">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-500 p-0.5 shadow-md">
+                            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-pink-300 font-bold text-xs">
+                                EV
+                            </div>
                         </div>
                         <div class="text-left">
-                            <p class="text-xs font-semibold text-slate-200">Elena Vance</p>
-                            <p class="text-[10px] text-slate-400">Senior Product Specialist</p>
+                            <p class="text-xs font-bold text-slate-100">Elena Vance</p>
+                            <p class="text-[10px] text-slate-400">Humanoid AI Design Lead</p>
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center pt-2 border-t border-white/10 text-[9px] text-slate-400">
-                        <span>TAP PHONE HERE</span>
-                        <span class="text-teal-400 font-mono">NFC ID: #LX-8832</span>
+                    <div class="flex justify-between items-center pt-2 border-t border-white/10 text-[9px] text-slate-400 z-10">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-hand-pointer text-purple-400"></i> TAP PHONE HERE</span>
+                        <span class="text-purple-300 font-mono">ID: #LX-8832</span>
                     </div>
 
                     <!-- Ripple Effect Overlay -->
-                    <div id="rippleOverlay" class="absolute inset-0 rounded-xl pointer-events-none opacity-0 flex items-center justify-center">
-                        <div class="w-full h-full rounded-xl bg-teal-400/20 animate-ping"></div>
+                    <div id="rippleOverlay" class="absolute inset-0 rounded-2xl pointer-events-none opacity-0 flex items-center justify-center">
+                        <div class="w-full h-full rounded-2xl bg-purple-500/30 animate-ping"></div>
                     </div>
                 </div>
 
                 <!-- Simulator Tap Trigger Button -->
-                <button id="simTapBtn" class="w-full mt-2 py-3.5 px-6 rounded-xl bg-gradient-to-r from-teal-500 via-emerald-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-slate-950 font-bold text-sm shadow-lg shadow-teal-500/25 transition active:scale-[0.98] flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-hand-pointer text-base"></i>
-                    <span>SIMULATE NFC TAP NOW</span>
+                <button id="simTapBtn" class="w-full mt-3 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-sm shadow-lg shadow-purple-600/30 transition active:scale-[0.98] flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-bolt text-base"></i>
+                    <span>TAP NFC TO CONNECT AI</span>
                 </button>
-                <p class="text-[11px] text-slate-400 mt-2">Simulates tapping your mobile device on an in-store product display card.</p>
             </div>
 
             <!-- Active Conversation Persona Card -->
-            <div class="glass-panel rounded-2xl p-5 border border-white/10 flex flex-col gap-3">
+            <div class="glass-panel rounded-3xl p-5 border border-white/10 flex flex-col gap-3">
                 <div class="flex items-center justify-between pb-3 border-b border-white/10">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Virtual Specialist</span>
-                    <span id="repAvailability" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Available</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider font-display">Assigned Specialist</span>
+                    <span id="repAvailability" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Active Online
+                    </span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-500 to-teal-400 p-0.5">
-                            <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center text-teal-300 font-bold text-lg">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-0.5 shadow-lg">
+                            <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-purple-300 font-bold text-xl font-display">
                                 EV
                             </div>
                         </div>
-                        <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-slate-900"></span>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Elena Vance</h3>
-                        <p class="text-xs text-slate-400">Showroom Representative & Architect</p>
-                        <p class="text-[11px] text-indigo-300 mt-0.5"><i class="fa-solid fa-shield-halved mr-1"></i> Expert in Sofa Dimensions & Custom Orders</p>
+                        <h3 class="text-base font-bold text-white">Elena Vance</h3>
+                        <p class="text-xs text-slate-400">Architect & Interior Design Specialist</p>
+                        <p class="text-[11px] text-pink-300 mt-1 flex items-center gap-1"><i class="fa-solid fa-sparkles text-xs"></i> Expressive Speech & Eye Tracking</p>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Inquiry Suggestions -->
-            <div class="glass-panel rounded-2xl p-5 border border-white/10 flex-1 flex flex-col justify-between">
+            <div class="glass-panel rounded-3xl p-5 border border-white/10 flex-1 flex flex-col justify-between gap-4">
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Instant Customer Inquiries</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 font-display">Suggested Prompts</h3>
                     <div class="space-y-2">
-                        <button class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 text-xs text-slate-300 hover:text-white transition flex items-center justify-between">
+                        <button class="quick-prompt-btn glass-panel-interactive w-full text-left p-3 rounded-2xl bg-white/5 border border-white/5 text-xs text-slate-200 hover:text-white transition flex items-center justify-between group">
                             <span>"Will the Modular Velvet Sofa fit a 32-inch doorway?"</span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-500"></i>
+                            <i class="fa-solid fa-arrow-right text-xs text-purple-400 group-hover:translate-x-1 transition"></i>
                         </button>
-                        <button class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 text-xs text-slate-300 hover:text-white transition flex items-center justify-between">
+                        <button class="quick-prompt-btn glass-panel-interactive w-full text-left p-3 rounded-2xl bg-white/5 border border-white/5 text-xs text-slate-200 hover:text-white transition flex items-center justify-between group">
                             <span>"What upholstery fabrics are stain-resistant for pets?"</span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-500"></i>
+                            <i class="fa-solid fa-arrow-right text-xs text-purple-400 group-hover:translate-x-1 transition"></i>
                         </button>
-                        <button class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 text-xs text-slate-300 hover:text-white transition flex items-center justify-between">
+                        <button class="quick-prompt-btn glass-panel-interactive w-full text-left p-3 rounded-2xl bg-white/5 border border-white/5 text-xs text-slate-200 hover:text-white transition flex items-center justify-between group">
                             <span>"Can you give me a price quote for custom executive desk?"</span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-500"></i>
+                            <i class="fa-solid fa-arrow-right text-xs text-purple-400 group-hover:translate-x-1 transition"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Session Metrics -->
-                <div class="mt-4 pt-3 border-t border-white/10 flex justify-between text-xs text-slate-400">
-                    <span>NFC Tag Location: <strong class="text-slate-200">Aisle 4 - Luxury Sofas</strong></span>
-                    <span>Session Status: <strong id="sessionStatusText" class="text-teal-400">Standby</strong></span>
+                <div class="pt-3 border-t border-white/10 flex justify-between text-xs text-slate-400">
+                    <span>Location: <strong class="text-slate-200">Aisle 4 - Luxury Sofas</strong></span>
+                    <span>Status: <strong id="sessionStatusText" class="text-purple-400">Standby</strong></span>
                 </div>
             </div>
         </section>
@@ -239,18 +264,21 @@
         <section class="w-full lg:w-2/3 flex flex-col gap-6">
             
             <!-- 3D Representative Interactive Display -->
-            <div class="glass-panel rounded-2xl border border-white/10 relative overflow-hidden flex flex-col h-[480px] sm:h-[520px]">
+            <div class="glass-panel rounded-3xl border border-white/10 relative overflow-hidden flex flex-col h-[520px] sm:h-[580px] shadow-2xl">
                 
+                <!-- Background Ambient Glow -->
+                <div class="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-transparent to-black/40 pointer-events-none"></div>
+
                 <!-- Overlay Header Badge & Representative State -->
                 <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-                    <div class="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 pointer-events-auto">
+                    <div class="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 pointer-events-auto shadow-lg">
                         <span id="statusIndicatorDot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
-                        <span id="repStatusLabel" class="text-xs font-semibold text-slate-300">Tap NFC Tag to Begin</span>
+                        <span id="repStatusLabel" class="text-xs font-semibold text-slate-200">Tap NFC Tag to Connect</span>
                     </div>
 
-                    <div class="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 pointer-events-auto text-xs text-slate-400">
-                        <i class="fa-solid fa-eye text-teal-400"></i>
-                        <span id="cameraTrackText">Interactive 3D Avatar</span>
+                    <div class="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/10 pointer-events-auto text-xs text-slate-300 shadow-lg">
+                        <i class="fa-solid fa-microchip text-purple-400"></i>
+                        <span id="cameraTrackText">Interactive 3D Avatar (Move Cursor)</span>
                     </div>
                 </div>
 
@@ -260,10 +288,12 @@
                 </div>
 
                 <!-- Live Subtitles / Speech Bubble Overlay -->
-                <div class="absolute bottom-4 left-4 right-4 z-20 pointer-events-none">
-                    <div id="subtitleBox" class="bg-slate-950/90 backdrop-blur-md border border-teal-500/30 rounded-xl p-4 shadow-2xl transition-all duration-300 opacity-0 transform translate-y-2 pointer-events-auto max-w-2xl mx-auto">
+                <div class="absolute bottom-6 left-6 right-6 z-20 pointer-events-none">
+                    <div id="subtitleBox" class="bg-slate-950/90 backdrop-blur-xl border border-purple-500/40 rounded-2xl p-4 shadow-2xl transition-all duration-500 opacity-0 transform translate-y-4 pointer-events-auto max-w-2xl mx-auto">
                         <div class="flex items-start space-x-3">
-                            <i class="fa-solid fa-quote-left text-teal-400 text-sm mt-0.5"></i>
+                            <div class="p-2 rounded-xl bg-purple-500/20 text-purple-300 shrink-0">
+                                <i class="fa-solid fa-quote-left text-xs"></i>
+                            </div>
                             <div class="flex-1">
                                 <p id="subtitleText" class="text-xs sm:text-sm font-medium text-slate-100 leading-relaxed">
                                     "Hello! Welcome to LuxeForm. I am Elena, your representative today. How can I assist you with your space?"
@@ -275,30 +305,30 @@
             </div>
 
             <!-- Interaction Box: Voice Microphone & Chat -->
-            <div class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 flex flex-col gap-4">
+            <div class="glass-panel rounded-3xl p-4 sm:p-5 border border-white/10 flex flex-col gap-4">
                 
                 <!-- Chat & Voice Input Row -->
                 <div class="flex items-center gap-3">
                     
                     <!-- Microphone Voice Toggle Button -->
-                    <button id="micToggleBtn" class="h-12 w-12 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/10 flex items-center justify-center text-slate-200 hover:text-white transition relative group shrink-0" title="Click to Speak">
-                        <i id="micIcon" class="fa-solid fa-microphone text-lg text-teal-400"></i>
-                        <span id="micPulse" class="absolute -inset-1 rounded-xl bg-teal-500/20 animate-ping hidden"></span>
+                    <button id="micToggleBtn" class="h-14 w-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border border-white/20 flex items-center justify-center text-white transition relative group shrink-0 shadow-lg shadow-purple-600/30" title="Click to Speak">
+                        <i id="micIcon" class="fa-solid fa-microphone text-xl"></i>
+                        <span id="micPulse" class="absolute -inset-1 rounded-2xl bg-pink-500/30 animate-ping hidden"></span>
                     </button>
 
                     <!-- Text Input Form -->
                     <form id="chatForm" class="flex-1 flex items-center gap-2">
-                        <input id="userTextInput" type="text" placeholder="Ask about materials, dimensions, customization..." class="w-full h-12 bg-slate-900/80 border border-white/10 rounded-xl px-4 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                        <button type="submit" class="h-12 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition flex items-center justify-center space-x-1 shrink-0">
+                        <input id="userTextInput" type="text" placeholder="Ask Elena about products, materials, custom dimensions..." class="w-full h-14 bg-slate-950/80 border border-white/10 rounded-2xl px-5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition">
+                        <button type="submit" class="h-14 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center space-x-2 shrink-0 shadow-lg shadow-purple-600/20">
                             <span>Send</span>
-                            <i class="fa-solid fa-paper-plane text-xs ml-1"></i>
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
                         </button>
                     </form>
                 </div>
 
                 <!-- Dialogue History Log Box -->
-                <div class="bg-slate-950/60 rounded-xl p-3 border border-white/5 max-h-40 overflow-y-auto space-y-2 text-xs" id="chatHistoryBox">
-                    <div class="text-slate-500 text-center italic py-2">Tap NFC Tag or ask a question to start real-time speech conversation.</div>
+                <div class="bg-slate-950/70 rounded-2xl p-3 border border-white/5 max-h-36 overflow-y-auto space-y-2 text-xs" id="chatHistoryBox">
+                    <div class="text-slate-500 text-center italic py-2">Tap NFC Tag or ask a question to start conversation.</div>
                 </div>
             </div>
 
@@ -310,23 +340,23 @@
     <div id="productDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-slate-950/95 border-l border-white/10 backdrop-blur-2xl transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col overflow-y-auto">
         <div class="flex items-center justify-between pb-4 border-b border-white/10">
             <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-layer-group text-indigo-400"></i>
-                <h2 class="font-bold text-base text-white">Showroom Product Context</h2>
+                <i class="fa-solid fa-layer-group text-purple-400"></i>
+                <h2 class="font-bold text-base text-white font-display">Showroom Catalog</h2>
             </div>
-            <button id="closeDrawerBtn" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+            <button id="closeDrawerBtn" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
 
         <div class="mt-6 space-y-6">
             <!-- Product Item 1 -->
-            <div class="glass-panel rounded-xl p-4 border border-white/10">
+            <div class="glass-panel rounded-2xl p-4 border border-white/10">
                 <div class="flex justify-between items-start mb-2">
                     <h3 class="font-bold text-sm text-white">Aura Modular Sectional Sofa</h3>
-                    <span class="text-xs font-bold text-teal-400">$2,850 USD</span>
+                    <span class="text-xs font-bold text-pink-400">$2,850 USD</span>
                 </div>
                 <p class="text-xs text-slate-400 mb-3">High-density ergonomic memory foam with stain-shield Italian performance velvet.</p>
-                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-900/60 p-2.5 rounded-lg border border-white/5 text-slate-300">
+                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-900/80 p-3 rounded-xl border border-white/5 text-slate-300">
                     <div><strong>Width:</strong> 112 in</div>
                     <div><strong>Depth:</strong> 64 in (Chaise)</div>
                     <div><strong>Height:</strong> 31 in</div>
@@ -335,13 +365,13 @@
             </div>
 
             <!-- Product Item 2 -->
-            <div class="glass-panel rounded-xl p-4 border border-white/10">
+            <div class="glass-panel rounded-2xl p-4 border border-white/10">
                 <div class="flex justify-between items-start mb-2">
                     <h3 class="font-bold text-sm text-white">Verona Executive Desk</h3>
-                    <span class="text-xs font-bold text-teal-400">$1,920 USD</span>
+                    <span class="text-xs font-bold text-pink-400">$1,920 USD</span>
                 </div>
                 <p class="text-xs text-slate-400 mb-3">Solid Walnut wood with integrated wireless charging and cable management system.</p>
-                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-900/60 p-2.5 rounded-lg border border-white/5 text-slate-300">
+                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-900/80 p-3 rounded-xl border border-white/5 text-slate-300">
                     <div><strong>Width:</strong> 72 in</div>
                     <div><strong>Depth:</strong> 34 in</div>
                     <div><strong>Height:</strong> 30 in</div>
@@ -350,80 +380,80 @@
             </div>
 
             <!-- Doorway Clearance Tool -->
-            <div class="glass-panel rounded-xl p-4 border border-teal-500/20 bg-teal-950/20">
-                <h4 class="text-xs font-bold text-teal-300 uppercase tracking-wider mb-2"><i class="fa-solid fa-ruler-combined mr-1"></i> Quick Doorway Clearance Test</h4>
+            <div class="glass-panel rounded-2xl p-4 border border-purple-500/30 bg-purple-950/20">
+                <h4 class="text-xs font-bold text-purple-300 uppercase tracking-wider mb-2 font-display"><i class="fa-solid fa-ruler-combined mr-1"></i> Doorway Clearance Checker</h4>
                 <p class="text-[11px] text-slate-400 mb-3">Check if your hallway/doorway can fit our modular sofa range.</p>
                 <div class="flex gap-2">
-                    <input id="doorWidthInput" type="number" placeholder="Door width (in)" class="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white">
-                    <button id="checkFitBtn" class="px-3 py-1.5 rounded-lg bg-teal-500 text-slate-950 font-bold text-xs hover:bg-teal-400 transition">Test</button>
+                    <input id="doorWidthInput" type="number" placeholder="Door width (in)" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                    <button id="checkFitBtn" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shrink-0">Test Fit</button>
                 </div>
                 <p id="fitResultText" class="text-xs font-semibold mt-2 hidden"></p>
             </div>
         </div>
     </div>
 
-    <!-- Staff Lead Dashboard Modal -->
+    <!-- Analytics Dashboard Modal -->
     <div id="dashboardModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel rounded-2xl border border-white/10 max-w-3xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
+        <div class="glass-panel rounded-3xl border border-white/10 max-w-3xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-4 border-b border-white/10">
                 <div class="flex items-center space-x-3">
-                    <div class="p-2 rounded-xl bg-teal-500/10 text-teal-400">
-                        <i class="fa-solid fa-chart-line text-lg"></i>
+                    <div class="p-2.5 rounded-2xl bg-purple-500/20 text-purple-300">
+                        <i class="fa-solid fa-chart-pie text-lg"></i>
                     </div>
                     <div>
-                        <h2 class="font-bold text-lg text-white">Staff Lead Dashboard Preview</h2>
+                        <h2 class="font-bold text-lg text-white font-display">Staff Lead Analytics</h2>
                         <p class="text-xs text-slate-400">Real-time captured NFC customer interactions & intent metrics</p>
                     </div>
                 </div>
-                <button id="closeDashboardBtn" class="p-2 rounded-lg text-slate-400 hover:text-white transition">
+                <button id="closeDashboardBtn" class="p-2 rounded-xl text-slate-400 hover:text-white transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <!-- Dashboard Stats Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-6">
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-white/5 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">NFC Taps Today</p>
-                    <p class="text-2xl font-black text-teal-400 mt-1">48</p>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase font-display">NFC Taps Today</p>
+                    <p class="text-2xl font-black text-purple-400 mt-1">48</p>
                 </div>
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-white/5 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">Avg Engagement</p>
-                    <p class="text-2xl font-black text-indigo-400 mt-1">3.4 min</p>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase font-display">Avg Engagement</p>
+                    <p class="text-2xl font-black text-pink-400 mt-1">3.4 min</p>
                 </div>
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-white/5 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">High Intent Leads</p>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase font-display">High Intent Leads</p>
                     <p class="text-2xl font-black text-emerald-400 mt-1">12</p>
                 </div>
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-white/5 text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">Quotes Generated</p>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase font-display">Quotes Generated</p>
                     <p class="text-2xl font-black text-amber-400 mt-1">7</p>
                 </div>
             </div>
 
             <!-- Lead Capture Log Table -->
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Recent NFC Visitor Sessions</h3>
-            <div class="overflow-x-auto bg-slate-900/60 rounded-xl border border-white/5">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 font-display">Recent NFC Visitor Sessions</h3>
+            <div class="overflow-x-auto bg-slate-900/60 rounded-2xl border border-white/5">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-800/80 text-slate-400 uppercase text-[10px]">
+                    <thead class="bg-slate-800/80 text-slate-400 uppercase text-[10px] font-display">
                         <tr>
-                            <th class="p-3">Time</th>
-                            <th class="p-3">Location Tag</th>
-                            <th class="p-3">Primary Inquiry</th>
-                            <th class="p-3">Intent Score</th>
+                            <th class="p-3.5">Time</th>
+                            <th class="p-3.5">Location Tag</th>
+                            <th class="p-3.5">Primary Inquiry</th>
+                            <th class="p-3.5">Intent Score</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
                         <tr>
-                            <td class="p-3">2 min ago</td>
-                            <td class="p-3 font-semibold text-white">Aisle 4 - Modular Sofa</td>
-                            <td class="p-3">Doorway clearance & stain warranty</td>
-                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 font-bold">High (92%)</span></td>
+                            <td class="p-3.5">2 min ago</td>
+                            <td class="p-3.5 font-semibold text-white">Aisle 4 - Modular Sofa</td>
+                            <td class="p-3.5">Doorway clearance & stain warranty</td>
+                            <td class="p-3.5"><span class="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-bold">High (92%)</span></td>
                         </tr>
                         <tr>
-                            <td class="p-3">14 min ago</td>
-                            <td class="p-3 font-semibold text-white">Aisle 2 - Executive Desk</td>
-                            <td class="p-3">Custom dimensions & Walnut finish</td>
-                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-indigo-500/20 text-indigo-400 font-bold">Medium (75%)</span></td>
+                            <td class="p-3.5">14 min ago</td>
+                            <td class="p-3.5 font-semibold text-white">Aisle 2 - Executive Desk</td>
+                            <td class="p-3.5">Custom dimensions & Walnut finish</td>
+                            <td class="p-3.5"><span class="px-2.5 py-0.5 rounded-full text-[10px] bg-purple-500/20 text-purple-300 font-bold">Medium (75%)</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -433,20 +463,20 @@
 
     <!-- API Key Settings Modal -->
     <div id="configModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel rounded-2xl border border-white/10 max-w-md w-full p-6 shadow-2xl">
+        <div class="glass-panel rounded-3xl border border-white/10 max-w-md w-full p-6 shadow-2xl">
             <div class="flex items-center justify-between pb-4 border-b border-white/10">
-                <h3 class="font-bold text-base text-white">Gemini API Settings</h3>
-                <button id="closeConfigBtn" class="p-1 rounded text-slate-400 hover:text-white">
+                <h3 class="font-bold text-base text-white font-display">Gemini API Configuration</h3>
+                <button id="closeConfigBtn" class="p-1.5 rounded-xl text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="mt-4 space-y-4">
-                <p class="text-xs text-slate-400">Enter your Gemini API Key below. The app uses `gemini-3-flash-preview` for high-speed representative speech dialogue.</p>
+                <p class="text-xs text-slate-400">Enter your Gemini API Key below. The app uses `gemini-1.5-flash` for high-speed dialogue.</p>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Gemini API Key</label>
-                    <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500">
                 </div>
-                <button id="saveApiKeyBtn" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-xs text-white transition">Save Key</button>
+                <button id="saveApiKeyBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-xs text-white transition hover:opacity-95 shadow-lg shadow-purple-600/20">Save Configuration</button>
             </div>
         </div>
     </div>
@@ -458,7 +488,7 @@
             isListening: false,
             isSpeaking: false,
             isThinking: false,
-            avatarState: 'idle', // 'idle', 'speaking', 'listening', 'thinking'
+            avatarState: 'idle',
             hasTappedNFC: false,
             audioSynth: window.speechSynthesis,
             recognition: null
@@ -493,10 +523,11 @@
         const apiKeyInput = document.getElementById('apiKeyInput');
         const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
 
-        // Three.js 3D Virtual Character Setup
+        // Three.js Photorealistic 3D Humanoid Head Setup
         let scene, camera, renderer;
-        let headMesh, mouthMesh, leftEye, rightEye, bodyMesh, auraMesh;
-        let mouthMorphed = 0;
+        let avatarGroup, headMesh, neckMesh, bodyMesh;
+        let leftEye, rightEye, irisLeft, irisRight;
+        let upperLip, lowerLip, chinMesh, cheekLeft, cheekRight, browLeft, browRight;
 
         function initThreeJS() {
             const container = document.getElementById('characterCanvasContainer');
@@ -504,93 +535,150 @@
             const height = container.clientHeight;
 
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.set(0, 0.4, 3.5);
+            camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+            camera.position.set(0, 0.25, 2.8);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(width, height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.1;
             container.appendChild(renderer.domElement);
 
-            // Lighting Setup
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            // Realistic Lighting Setup
+            const ambientLight = new THREE.AmbientLight(0xfefefe, 0.9);
             scene.add(ambientLight);
 
-            const keyLight = new THREE.DirectionalLight(0x6366f1, 2.0);
-            keyLight.position.set(2, 3, 4);
+            // Studio Key Light (Warm Cyber-Pink)
+            const keyLight = new THREE.DirectionalLight(0xec4899, 1.8);
+            keyLight.position.set(2, 3, 3);
             scene.add(keyLight);
 
-            const fillLight = new THREE.DirectionalLight(0x14b8a6, 1.5);
+            // Fill Light (Soft Cyan)
+            const fillLight = new THREE.DirectionalLight(0x06b6d4, 1.4);
             fillLight.position.set(-2, 1, 2);
             scene.add(fillLight);
 
-            // Virtual Character Group
-            const characterGroup = new THREE.Group();
+            // Rim Light (Deep Purple Backlight for depth)
+            const rimLight = new THREE.DirectionalLight(0xa855f7, 2.2);
+            rimLight.position.set(0, 2, -3);
+            scene.add(rimLight);
 
-            // Head Mesh (Smooth Sci-Fi Stylized Upper Body / Head)
-            const headGeo = new THREE.SphereGeometry(0.55, 32, 32);
-            headGeo.scale(1, 1.2, 0.9);
-            const headMat = new THREE.MeshStandardMaterial({
-                color: 0x1e293b,
-                roughness: 0.3,
-                metalness: 0.8,
-                wireframe: false
+            // Humanoid Avatar Group
+            avatarGroup = new THREE.Group();
+
+            // Realistic Skin Material with Soft Shading
+            const skinMaterial = new THREE.MeshStandardMaterial({
+                color: 0xe0ac69, // Natural warm tone
+                roughness: 0.45,
+                metalness: 0.05,
             });
-            headMesh = new THREE.Mesh(headGeo, headMat);
-            characterGroup.add(headMesh);
 
-            // Glowing Eyes
-            const eyeGeo = new THREE.SphereGeometry(0.08, 16, 16);
-            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x2dd4bf });
-            
-            leftEye = new THREE.Mesh(eyeGeo, eyeMat);
-            leftEye.position.set(-0.18, 0.1, 0.48);
+            const suitMaterial = new THREE.MeshStandardMaterial({
+                color: 0x120e24, // Dark luxury fabric
+                roughness: 0.6,
+                metalness: 0.2
+            });
+
+            // 1. Head Base
+            const headGeo = new THREE.SphereGeometry(0.48, 32, 32);
+            headGeo.scale(1, 1.25, 0.95);
+            headMesh = new THREE.Mesh(headGeo, skinMaterial);
+            avatarGroup.add(headMesh);
+
+            // Cheeks for natural facial structure
+            const cheekGeo = new THREE.SphereGeometry(0.18, 16, 16);
+            cheekLeft = new THREE.Mesh(cheekGeo, skinMaterial);
+            cheekLeft.position.set(-0.22, -0.05, 0.35);
+            headMesh.add(cheekLeft);
+
+            cheekRight = new THREE.Mesh(cheekGeo, skinMaterial);
+            cheekRight.position.set(0.22, -0.05, 0.35);
+            headMesh.add(cheekRight);
+
+            // 2. Eyes Construction (Realistic Eyeballs & Glowing Irises)
+            const eyeScleraGeo = new THREE.SphereGeometry(0.075, 16, 16);
+            const scleraMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.1 });
+
+            const irisGeo = new THREE.SphereGeometry(0.04, 16, 16);
+            const irisMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // Cyan Iris
+
+            // Left Eye
+            leftEye = new THREE.Mesh(eyeScleraGeo, scleraMat);
+            leftEye.position.set(-0.16, 0.12, 0.41);
+            irisLeft = new THREE.Mesh(irisGeo, irisMat);
+            irisLeft.position.set(0, 0, 0.05);
+            leftEye.add(irisLeft);
             headMesh.add(leftEye);
 
-            rightEye = new THREE.Mesh(eyeGeo, eyeMat);
-            rightEye.position.set(0.18, 0.1, 0.48);
+            // Right Eye
+            rightEye = new THREE.Mesh(eyeScleraGeo, scleraMat);
+            rightEye.position.set(0.16, 0.12, 0.41);
+            irisRight = new THREE.Mesh(irisGeo, irisMat);
+            irisRight.position.set(0, 0, 0.05);
+            rightEye.add(irisRight);
             headMesh.add(rightEye);
 
-            // Animated Mouth (Lip Sync)
-            const mouthGeo = new THREE.BoxGeometry(0.24, 0.04, 0.05);
-            const mouthMat = new THREE.MeshBasicMaterial({ color: 0x6366f1 });
-            mouthMesh = new THREE.Mesh(mouthGeo, mouthMat);
-            mouthMesh.position.set(0, -0.22, 0.5);
-            headMesh.add(mouthMesh);
+            // Eyebrows
+            const browGeo = new THREE.BoxGeometry(0.12, 0.018, 0.02);
+            const browMat = new THREE.MeshStandardMaterial({ color: 0x331d0d, roughness: 0.8 });
+            browLeft = new THREE.Mesh(browGeo, browMat);
+            browLeft.position.set(-0.16, 0.22, 0.43);
+            browLeft.rotation.z = -0.05;
+            headMesh.add(browLeft);
 
-            // Torso / Suit Base
-            const bodyGeo = new THREE.CylinderGeometry(0.4, 0.7, 1.2, 32);
-            const bodyMat = new THREE.MeshStandardMaterial({
-                color: 0x0f172a,
-                roughness: 0.4,
-                metalness: 0.5
-            });
-            bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
-            bodyMesh.position.set(0, -1.1, 0);
-            characterGroup.add(bodyMesh);
+            browRight = new THREE.Mesh(browGeo, browMat);
+            browRight.position.set(0.16, 0.22, 0.43);
+            browRight.rotation.z = 0.05;
+            headMesh.add(browRight);
 
-            // Halo / Representative Standby Ring
-            const ringGeo = new THREE.RingGeometry(0.8, 0.85, 32);
-            const ringMat = new THREE.MeshBasicMaterial({ color: 0x14b8a6, side: THREE.DoubleSide });
-            auraMesh = new THREE.Mesh(ringGeo, ringMat);
-            auraMesh.rotation.x = Math.PI / 2;
-            auraMesh.position.set(0, -1.6, 0);
-            characterGroup.add(auraMesh);
+            // 3. Humanoid Lips & Mouth Assembly
+            const lipMat = new THREE.MeshStandardMaterial({ color: 0xc25975, roughness: 0.3 });
+            
+            const upperLipGeo = new THREE.BoxGeometry(0.18, 0.03, 0.04);
+            upperLip = new THREE.Mesh(upperLipGeo, lipMat);
+            upperLip.position.set(0, -0.18, 0.43);
+            headMesh.add(upperLip);
 
-            scene.add(characterGroup);
+            const lowerLipGeo = new THREE.BoxGeometry(0.16, 0.035, 0.04);
+            lowerLip = new THREE.Mesh(lowerLipGeo, lipMat);
+            lowerLip.position.set(0, -0.22, 0.42);
+            headMesh.add(lowerLip);
 
-            // Mouse Eye-Tracking Interaction
+            // 4. Neck and Torso
+            const neckGeo = new THREE.CylinderGeometry(0.2, 0.25, 0.4, 24);
+            neckMesh = new THREE.Mesh(neckGeo, skinMaterial);
+            neckMesh.position.set(0, -0.7, 0);
+            avatarGroup.add(neckMesh);
+
+            const bodyGeo = new THREE.CylinderGeometry(0.42, 0.65, 0.9, 32);
+            bodyMesh = new THREE.Mesh(bodyGeo, suitMaterial);
+            bodyMesh.position.set(0, -1.25, 0);
+            avatarGroup.add(bodyMesh);
+
+            scene.add(avatarGroup);
+
+            // Mouse Look / Interactive Eye Tracking
             window.addEventListener('mousemove', (e) => {
                 const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-                if (headMesh) {
-                    headMesh.rotation.y = THREE.MathUtils.lerp(headMesh.rotation.y, mouseX * 0.2, 0.05);
-                    headMesh.rotation.x = THREE.MathUtils.lerp(headMesh.rotation.x, -mouseY * 0.1, 0.05);
+                
+                if (avatarGroup) {
+                    // Smooth head turn target
+                    avatarGroup.rotation.y = THREE.MathUtils.lerp(avatarGroup.rotation.y, mouseX * 0.25, 0.08);
+                    avatarGroup.rotation.x = THREE.MathUtils.lerp(avatarGroup.rotation.x, -mouseY * 0.15, 0.08);
+                }
+
+                // Micro eye movements
+                if (irisLeft && irisRight) {
+                    irisLeft.position.x = THREE.MathUtils.lerp(irisLeft.position.x, mouseX * 0.015, 0.1);
+                    irisLeft.position.y = THREE.MathUtils.lerp(irisLeft.position.y, mouseY * 0.015, 0.1);
+                    irisRight.position.x = THREE.MathUtils.lerp(irisRight.position.x, mouseX * 0.015, 0.1);
+                    irisRight.position.y = THREE.MathUtils.lerp(irisRight.position.y, mouseY * 0.015, 0.1);
                 }
             });
 
-            // Handle Resize
+            // Handle Window Resize
             window.addEventListener('resize', () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
@@ -603,41 +691,74 @@
         }
 
         let clock = new THREE.Clock();
+        let blinkTimer = 0;
+
         function animate3D() {
             requestAnimationFrame(animate3D);
             const elapsedTime = clock.getElapsedTime();
 
-            // Breathing / Floating motion
-            if (headMesh) {
-                headMesh.position.y = Math.sin(elapsedTime * 2) * 0.04;
-            }
-            if (auraMesh) {
-                auraMesh.rotation.z += 0.01;
+            // Natural Breathing & Subtle Floating motion
+            if (avatarGroup) {
+                avatarGroup.position.y = Math.sin(elapsedTime * 1.8) * 0.02;
             }
 
-            // Lip-sync / Speech Mouth Animation
-            if (state.isSpeaking && mouthMesh) {
-                const openScale = 1 + Math.sin(elapsedTime * 25) * 1.5;
-                mouthMesh.scale.set(1, openScale, 1);
-                eyeMeshColor(0x6366f1); // Indigo active speaking color
-            } else if (state.isListening && mouthMesh) {
-                mouthMesh.scale.set(1, 0.8, 1);
-                eyeMeshColor(0x2dd4bf); // Teal listening color
-            } else if (state.isThinking && mouthMesh) {
-                mouthMesh.scale.set(0.6, 0.5, 1);
-                eyeMeshColor(0xf59e0b); // Amber thinking color
+            // Realistic Micro Eye Blinking Logic
+            blinkTimer += 0.016;
+            if (blinkTimer > 3.5 + Math.random() * 2) {
+                blinkTimer = 0;
+                if (leftEye && rightEye) {
+                    leftEye.scale.y = 0.1;
+                    rightEye.scale.y = 0.1;
+                    setTimeout(() => {
+                        if (leftEye && rightEye) {
+                            leftEye.scale.y = 1;
+                            rightEye.scale.y = 1;
+                        }
+                    }, 120);
+                }
+            }
+
+            // Expressive Speech Lip-Sync Animation
+            if (state.isSpeaking && lowerLip && upperLip) {
+                const mouthOpen = Math.abs(Math.sin(elapsedTime * 18)) * 0.08 + 0.01;
+                lowerLip.position.y = -0.22 - mouthOpen;
+                upperLip.position.y = -0.18 + (mouthOpen * 0.3);
+                
+                // Animated Eyebrow Expression while Speaking
+                if (browLeft && browRight) {
+                    browLeft.position.y = 0.22 + Math.sin(elapsedTime * 8) * 0.01;
+                    browRight.position.y = 0.22 + Math.sin(elapsedTime * 8) * 0.01;
+                }
+                setIrisColor(0xec4899); // Active Cyber-Pink
+            } else if (state.isListening && lowerLip) {
+                lowerLip.position.y = -0.22;
+                upperLip.position.y = -0.18;
+                if (browLeft && browRight) {
+                    browLeft.position.y = 0.23; // Attentive slightly raised eyebrows
+                    browRight.position.y = 0.23;
+                }
+                setIrisColor(0x10b981); // Emerald Active Listening
+            } else if (state.isThinking) {
+                setIrisColor(0xf59e0b); // Amber Thinking
             } else {
-                if (mouthMesh) mouthMesh.scale.set(1, 1, 1);
-                eyeMeshColor(0x2dd4bf);
+                if (lowerLip && upperLip) {
+                    lowerLip.position.y = -0.22;
+                    upperLip.position.y = -0.18;
+                }
+                if (browLeft && browRight) {
+                    browLeft.position.y = 0.22;
+                    browRight.position.y = 0.22;
+                }
+                setIrisColor(0x06b6d4); // Cyan Ready
             }
 
             renderer.render(scene, camera);
         }
 
-        function eyeMeshColor(hexColor) {
-            if (leftEye && rightEye) {
-                leftEye.material.color.setHex(hexColor);
-                rightEye.material.color.setHex(hexColor);
+        function setIrisColor(hexColor) {
+            if (irisLeft && irisRight) {
+                irisLeft.material.color.setHex(hexColor);
+                irisRight.material.color.setHex(hexColor);
             }
         }
 
@@ -672,14 +793,14 @@
             }
         }
 
-        // Voice Speech Synthesis
+        // Natural Human Voice Speech Synthesis
         function speakText(text) {
             if (!state.audioSynth) return;
-            state.audioSynth.cancel(); // Stop ongoing speech
+            state.audioSynth.cancel();
 
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.0;
-            utterance.pitch = 1.1;
+            utterance.rate = 0.95; // Natural human pace
+            utterance.pitch = 1.05;
 
             utterance.onstart = () => {
                 setAvatarState('speaking');
@@ -695,7 +816,7 @@
 
         function showSubtitle(text) {
             subtitleText.textContent = `"${text}"`;
-            subtitleBox.classList.remove('opacity-0', 'translate-y-2');
+            subtitleBox.classList.remove('opacity-0', 'translate-y-4');
             subtitleBox.classList.add('opacity-100', 'translate-y-0');
         }
 
@@ -707,42 +828,43 @@
 
             switch (newState) {
                 case 'listening':
-                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-teal-400 animate-ping';
+                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping';
                     repStatusLabel.textContent = 'Elena is Listening...';
-                    micIcon.className = 'fa-solid fa-microphone-slash text-lg text-teal-300';
+                    micIcon.className = 'fa-solid fa-microphone-slash text-xl text-emerald-300';
                     micPulse.classList.remove('hidden');
                     break;
                 case 'thinking':
                     statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
-                    repStatusLabel.textContent = 'Elena is Thinking...';
-                    micIcon.className = 'fa-solid fa-spinner animate-spin text-lg text-amber-400';
+                    repStatusLabel.textContent = 'Elena is Processing...';
+                    micIcon.className = 'fa-solid fa-spinner animate-spin text-xl text-amber-400';
                     micPulse.classList.add('hidden');
                     break;
                 case 'speaking':
-                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-indigo-400 animate-bounce';
+                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-pink-400 animate-bounce';
                     repStatusLabel.textContent = 'Elena is Speaking';
-                    micIcon.className = 'fa-solid fa-microphone text-lg text-teal-400';
+                    micIcon.className = 'fa-solid fa-microphone text-xl text-white';
                     micPulse.classList.add('hidden');
                     break;
                 default:
-                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+                    statusIndicatorDot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400';
                     repStatusLabel.textContent = 'Elena Ready • Showroom Active';
-                    micIcon.className = 'fa-solid fa-microphone text-lg text-teal-400';
+                    micIcon.className = 'fa-solid fa-microphone text-xl text-white';
                     micPulse.classList.add('hidden');
                     break;
             }
         }
 
-        // Perform Gemini 2.5 Flash API Query
+        // Perform Gemini API Query
         async function queryGemini(promptText) {
             setAvatarState('thinking');
 
-            const systemPrompt = `You are Elena Vance, an expert, warm, and professional enterprise showroom representative for LuxeForm furniture. 
-            Keep your responses concise (2 to 3 sentences maximum) suitable for audio speech. 
+            const systemPrompt = `You are Elena Vance, a warm, charming, and highly intelligent human executive representative for LuxeForm furniture.
+            Speak naturally like a real person in conversation. 
+            Keep your responses concise (2 to 3 sentences maximum) suitable for speech dialogue. 
             Answer customer questions regarding sofa dimensions, doorway fit, stain warranties, executive desk specs, and custom order quotes accurately.`;
 
             const apiKey = state.apiKey;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
@@ -763,13 +885,13 @@
                     appendChatMessage('representative', replyText);
                     speakText(replyText);
                 } else {
-                    const fallback = "I'm having trouble connecting to my central showroom database right now, but our Aura Sectional fits doorways starting at 30 inches.";
+                    const fallback = "I'm having a quick moment connecting to our catalog database, but our Aura Sectional sofa comfortably fits doorways 30 inches and wider!";
                     appendChatMessage('representative', fallback);
                     speakText(fallback);
                 }
             } catch (err) {
                 console.error("Gemini API Error:", err);
-                const localReply = "Our Aura Modular Velvet Sofa is built with high-density ergonomic memory foam and requires a minimum 30-inch doorway clearance. Would you like me to reserve a quote?";
+                const localReply = "Our Aura Modular Velvet Sofa features ergonomic memory foam and requires a minimum 30-inch doorway clearance. Would you like me to prepare a custom quote for you?";
                 appendChatMessage('representative', localReply);
                 speakText(localReply);
             }
@@ -788,8 +910,8 @@
             
             const bubble = document.createElement('span');
             bubble.className = sender === 'user' 
-                ? 'inline-block bg-indigo-600/80 text-white px-3 py-1.5 rounded-xl max-w-[85%]'
-                : 'inline-block bg-slate-800 text-slate-200 border border-white/10 px-3 py-1.5 rounded-xl max-w-[85%]';
+                ? 'inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3.5 py-1.5 rounded-2xl max-w-[85%]'
+                : 'inline-block bg-slate-900 text-slate-200 border border-white/10 px-3.5 py-1.5 rounded-2xl max-w-[85%]';
             
             bubble.textContent = text;
             msgDiv.appendChild(bubble);
@@ -802,11 +924,10 @@
             state.hasTappedNFC = true;
             sessionStatusText.textContent = "NFC Connected";
 
-            // Card ripple animation
             rippleOverlay.classList.remove('opacity-0');
             setTimeout(() => rippleOverlay.classList.add('opacity-0'), 1000);
 
-            const greeting = "Hello! Welcome to LuxeForm Showroom. I'm Elena, your virtual specialist. Feel free to ask about our modular sofas, doorway clearance, or custom order quotes!";
+            const greeting = "Hello there! I'm Elena Vance. Welcome to LuxeForm! How can I assist you with our luxury furniture collections today?";
             appendChatMessage('representative', greeting);
             speakText(greeting);
         }
@@ -857,10 +978,10 @@
                 resultEl.textContent = "Please enter a valid door width.";
                 resultEl.className = "text-xs font-semibold mt-2 text-amber-400";
             } else if (width >= 30) {
-                resultEl.textContent = `Great news! ${width} inches is sufficient for our Aura Modular Sofa (30 in min).`;
+                resultEl.textContent = `Perfect! ${width} inches is sufficient for our Aura Modular Sofa (30 in minimum required).`;
                 resultEl.className = "text-xs font-semibold mt-2 text-emerald-400";
             } else {
-                resultEl.textContent = `Doorway is ${width} inches. Our standard sofa requires 30 inches. We can recommend flat-pack modules!`;
+                resultEl.textContent = `Doorway is ${width} inches. Standard module requires 30 inches, but our flat-pack option will work!`;
                 resultEl.className = "text-xs font-semibold mt-2 text-amber-400";
             }
         });
@@ -869,7 +990,10 @@
         toggleDrawerBtn.addEventListener('click', () => productDrawer.classList.remove('translate-x-full'));
         closeDrawerBtn.addEventListener('click', () => productDrawer.classList.add('translate-x-full'));
 
-        toggleDashboardBtn.addEventListener('click', () => dashboardModal.classList.remove('hidden', 'flex').then ? null : dashboardModal.classList.add('flex'));
+        toggleDashboardBtn.addEventListener('click', () => {
+            dashboardModal.classList.remove('hidden');
+            dashboardModal.classList.add('flex');
+        });
         closeDashboardBtn.addEventListener('click', () => dashboardModal.classList.add('hidden'));
 
         openConfigBtn.addEventListener('click', () => {
